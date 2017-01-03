@@ -11,6 +11,7 @@ import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import java.security.MessageDigest;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -54,11 +55,29 @@ public class StudentDaoImpl implements StudentDao{
     }
 
     @Transactional
-    public StudentEntity selectStudent (String studentNum){
+    public StudentEntity selectStudentInfo (String studentNum){
         String hql = "from StudentEntity student where student.studentNum = ?";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString(0, studentNum);
         return (StudentEntity) query.uniqueResult();
+    }
+
+    @Transactional
+    public List<StudentEntity> selectStudentByStudentNum (String studentNum){
+        String hql = "from StudentEntity student where student.studentNum like :studentNum";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("studentNum", studentNum);
+        List<StudentEntity> studentList = (List<StudentEntity>)query.list();
+        return studentList;
+    }
+
+    @Transactional
+    public List<StudentEntity> selectStudentByStudentName (String studentName){
+        String hql = "from StudentEntity student where student.studentName like :studentName";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("studentName", studentName);
+        List<StudentEntity> studentList = (List<StudentEntity>)query.list();
+        return studentList;
     }
 
     @Transactional
@@ -94,5 +113,18 @@ public class StudentDaoImpl implements StudentDao{
         {
             return false;
         }
+    }
+
+    @Transactional
+    public List<HashMap<String, Integer>> studentNativeCount(){
+        String hql = "select distinct studentNative from StudentEntity";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        List<String> list = query.list();
+
+    }
+
+    @Transactional
+    public List<HashMap<String, Integer>> studentHobbyCount(){
+
     }
 }

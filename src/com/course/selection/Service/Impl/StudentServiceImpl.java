@@ -6,6 +6,7 @@ import com.course.selection.Service.StudentService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -34,11 +35,6 @@ public class StudentServiceImpl implements StudentService{
         studentDao.deleteStudent(studentNum);
     }
 
-    public StudentEntity selectStudent (String studentNum){
-        StudentEntity studentEntity = studentDao.selectStudent(studentNum);
-        return studentEntity;
-    }
-
     public void updateStudent(String studentNum, StudentEntity studentEntity){
         studentDao.updateStudent(studentNum, studentEntity);
     }
@@ -51,5 +47,30 @@ public class StudentServiceImpl implements StudentService{
     public boolean studentLoginCheck(String studentNum, String studentPwd){
         boolean flag = studentDao.studentLoginCheck(studentNum, studentPwd);
         return  flag;
+    }
+
+    public StudentEntity selectStudentInfo (String studentNum){
+        StudentEntity studentEntity = studentDao.selectStudentInfo(studentNum);
+        return studentEntity;
+    }
+
+    public List<StudentEntity> selectStudentByStudentNum (String studentNum){
+        List<StudentEntity> studentList = studentDao.selectStudentByStudentNum(studentNum);
+        return studentList;
+    }
+
+    public List<StudentEntity> selectStudentByStudentName (String studentName){
+        List<StudentEntity> studentList = studentDao.selectStudentByStudentName(studentName);
+        return studentList;
+    }
+
+    public List<HashMap<String, Integer>> studentNativeCount(){
+        List<HashMap<String, Integer>> studentNativeList = studentDao.studentNativeCount();
+        return studentNativeList;
+    }
+
+    public List<HashMap<String, Integer>> studentHobbyCount(){
+        List<HashMap<String, Integer>> studentHobbyList = studentDao.studentNativeCount();
+        return studentHobbyList;
     }
 }

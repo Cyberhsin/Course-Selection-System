@@ -26,17 +26,17 @@ public class SelectionServiceImpl implements SelectionService{
         this.selectionDao = selectionDao;
     }
 
-    public void insertSelection(SelectionEntity selectionEntity){
-        selectionDao.insertSelection(selectionEntity);
+    public void insertSelection(String studentNum, String courseNum) {
+        selectionDao.insertSelection(studentNum, courseNum);
     }
 
-    public List<SelectionEntity> selectSelection (String studentNum){
-        List<SelectionEntity> selectionList = selectionDao.selectSelection(studentNum);
+    public List<SelectionEntity> selectSelectionByStudentNum (String studentNum) {
+        List<SelectionEntity> selectionList = selectionDao.selectSelectionByStudentNum(studentNum);
         return selectionList;
     }
 
-    public List<SelectionEntity> listAllStudent(){
-        List<SelectionEntity> selectionList = selectionDao.listAllSelection();
+    public List<SelectionEntity> selectSelectionByCourseNum(String courseNum){
+        List<SelectionEntity> selectionList = selectionDao.selectSelectionByStudentNum(courseNum);
         return selectionList;
     }
 }

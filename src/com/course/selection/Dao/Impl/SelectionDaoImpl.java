@@ -1,7 +1,9 @@
 package com.course.selection.Dao.Impl;
 
 import com.course.selection.Dao.SelectionDao;
+import com.course.selection.Entity.CourseEntity;
 import com.course.selection.Entity.SelectionEntity;
+import com.course.selection.Entity.StudentEntity;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,13 +32,7 @@ public class SelectionDaoImpl implements SelectionDao{
     }
 
     @Transactional
-    public void insertSelection(SelectionEntity selectionEntity){
-        Session session = sessionFactory.getCurrentSession();
-        session.save(selectionEntity);
-    }
-
-    @Transactional
-    public List<SelectionEntity> selectSelection (String studentNum){
+    public List<SelectionEntity> selectSelectionByStudentNum (String studentNum){
         String hql = "from SelectionEntity selection where selection.studentByStudentNum.studentNum = ?";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString(0, studentNum);
@@ -45,10 +41,35 @@ public class SelectionDaoImpl implements SelectionDao{
     }
 
     @Transactional
-    public List<SelectionEntity> listAllSelection(){
-        String hql = "from SelectionEntity ";
+    public List<SelectionEntity> selectSelectionByCourseNum(String courseNum){
+        String hql = "from SelectionEntity selection where selection.courseByCourseNum.courseNum = ?";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString(0, courseNum);
         List<SelectionEntity> selectionList = (List<SelectionEntity>)query.list();
         return selectionList;
+    }
+
+    @Transactional
+    public void insertSelection(String studentNum, String courseNum){
+        Session session = sessionFactory.getCurrentSession();
+
+        String courseHql = "from CourseEntity course where course.courseNum = ?";
+        Query courseQuery = sessionFactory.getCurrentSession().createQuery(courseHql);
+        courseQuery.setString(0, courseNum);
+        CourseEntity courseEntity = (CourseEntity) courseQuery.uniqueResult();
+        Integer courseCount = courseEntity.getCourseCount();
+        courseCount = courseCount + 1;
+        session.update(courseCount);
+
+
+        String studentHql = "from StudentEntity student where student.studentNum = ?";
+        Query studentQuery = sessionFactory.getCurrentSession().createQuery(studentHql);
+        studentQuery.setString(0, studentNum);
+        StudentEntity studentEntity = (StudentEntity) studentQuery.uniqueResult();
+
+        SelectionEntity selectionEntity = new SelectionEntity();
+        selectionEntity.setCourseByCourseNum(courseEntity);
+        selectionEntity.setStudentByStudentNum(studentEntity);
+        session.save(selectionEntity);
     }
 }
