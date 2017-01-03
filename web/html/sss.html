@@ -1,0 +1,56 @@
+<HTML>
+	<meta charset="utf-8">
+
+	<HEAD>
+		<TITLE>生成验证码</TITLE>
+		<SCRIPT LANGUAGE="JavaScript">
+			function createCode(len) {
+				var seed = new Array(
+					'abcdefghijklmnopqrstuvwxyz',
+					'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+					'0123456789'
+				); //创建需要的数据数组 
+				var idx, i;
+				var result = ''; //返回的结果变量 
+				for(i = 0; i < len; i++) //根据指定的长度 
+				{
+					idx = Math.floor(Math.random() * 3); //获得随机数据的整数部分-获取一个随机整数 
+					result += seed[idx].substr(Math.floor(Math.random() * (seed[idx].length)), 1); //根据随机数获取数据中一个值 
+				}
+				return result; //返回随机结果 
+			}
+
+			function test() {
+				var inputRandom = document.getElementById("inputRandom").value;
+				var autoRandom = document.getElementById("autoRandom").innerHTML;
+				if(inputRandom == autoRandom && inputRandom != "") {
+					alert("通过验证");
+				} else {
+					alert("没有通过验证");
+				}
+
+			}
+		</SCRIPT>
+	</HEAD>
+
+	<BODY>
+		<SELECT id="sel" hidden>
+			<option value=4 selected></option>
+		</SELECT>
+		<table>
+			<tr>
+				<td>验证码：</td>
+				<td><input type="text" id="inputRandom"></td>
+				<td><label id="autoRandom" value=""></label>
+					<INPUT TYPE="button" VALUE="获取验证码" ONCLICK="autoRandom.innerHTML=createCode(sel.value)">
+				</td>
+				<td><input type="button" value="验证" onclick="test()"></td>
+			</tr>
+
+		</table>
+		<script type="text/javascript">
+			window.onload() = autoRandom.innerHTML = createCode(sel.value);
+		</script>
+	</BODY>
+
+</HTML>

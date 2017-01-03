@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.course.selection.Entity.SelectionEntity" table="selection" schema="course_selection">
+        <id name="selectionId">
+            <column name="selection_id" sql-type="varchar(30)" length="30"/>
+        </id>
+        <many-to-one name="studentByStudentNum" class="com.course.selection.Entity.StudentEntity">
+            <column name="student_num"/>
+        </many-to-one>
+        <many-to-one name="courseByCourseNum" class="com.course.selection.Entity.CourseEntity">
+            <column name="course_num"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

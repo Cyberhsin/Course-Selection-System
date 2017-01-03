@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.course.selection.Entity.StudentEntity" table="student" schema="course_selection">
+        <id name="studentId">
+            <column name="student_id" sql-type="varchar(30)" length="30"/>
+        </id>
+        <property name="studentNum">
+            <column name="student_num" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="studentName">
+            <column name="student_name" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="studentIdnums">
+            <column name="student_idnums" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="studentClass">
+            <column name="student_class" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="studentSex">
+            <column name="student_sex" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="studentPwd">
+            <column name="student_pwd" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="studentAddress">
+            <column name="student_address" sql-type="varchar(20)" length="20" not-null="true"/>
+        </property>
+        <property name="studentNative">
+            <column name="student_native" sql-type="varchar(20)" length="20" not-null="true"/>
+        </property>
+        <property name="studentTel">
+            <column name="student_tel" sql-type="varchar(20)" length="20" not-null="true"/>
+        </property>
+        <property name="studentHobby">
+            <column name="student_hobby" sql-type="varchar(20)" length="20" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>
