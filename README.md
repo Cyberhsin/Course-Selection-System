@@ -4,8 +4,8 @@
 #### 而且 很多功能都没实现
   所以别看了，Hhhhhhhhh
 不过你如果非要尝试运行一下的话，你需要经历以下几个步骤：
-* 1 安装tomcat
-* 2 安装Mysql并导入sql文件
-* 3 修改Hibernate中的数据库的用户名密码（更改为你自己本地的）
-* 4 导入缺少的Tomcat包（自己看着办吧）
+* 1 安装Tomcat
+* 2 安装MySQL并导入sql文件
+* 3 在applicationContext.xml修改MySQL的用户名及密码
+* 4 在Tomcat的安装目录导入JSTL的基本包jstl.jar和standard.jar
 * 5 完工啦！
