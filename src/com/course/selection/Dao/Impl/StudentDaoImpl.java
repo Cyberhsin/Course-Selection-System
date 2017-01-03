@@ -11,6 +11,7 @@ import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -119,12 +120,35 @@ public class StudentDaoImpl implements StudentDao{
     public List<HashMap<String, Integer>> studentNativeCount(){
         String hql = "select distinct studentNative from StudentEntity";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        List<String> list = query.list();
-
+        List<String> nativeList = query.list();
+        List<HashMap<String, Integer>> studentNativeList = new ArrayList<HashMap<String, Integer>>();
+        for(int i = 0 ; i < nativeList.size() ; i++) {
+            hql = "select count(*) from StudentEntity student where student.studentNative = ?";
+            query = sessionFactory.getCurrentSession().createQuery(hql);
+            query.setString(0, nativeList.get(i));
+            int nativeCount = ((Integer)query.uniqueResult()).intValue();
+            HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
+            hashMap.put(nativeList.get(i), nativeCount);
+            studentNativeList.add(hashMap);
+        }
+        return studentNativeList;
     }
 
     @Transactional
     public List<HashMap<String, Integer>> studentHobbyCount(){
-
+        String hql = "select distinct studentHobby from StudentEntity";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        List<String> hobbyList = query.list();
+        List<HashMap<String, Integer>> studentHobbyList = new ArrayList<HashMap<String, Integer>>();
+        for(int i = 0 ; i < hobbyList.size() ; i++) {
+            hql = "select count(*) from StudentEntity student where student.studentHobby = ?";
+            query = sessionFactory.getCurrentSession().createQuery(hql);
+            query.setString(0, hobbyList.get(i));
+            int nativeCount = ((Integer)query.uniqueResult()).intValue();
+            HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
+            hashMap.put(hobbyList.get(i), nativeCount);
+            studentHobbyList.add(hashMap);
+        }
+        return studentHobbyList;
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -71,5 +73,23 @@ public class SelectionDaoImpl implements SelectionDao{
         selectionEntity.setCourseByCourseNum(courseEntity);
         selectionEntity.setStudentByStudentNum(studentEntity);
         session.save(selectionEntity);
+    }
+
+    @Transactional
+    public List<HashMap<StudentEntity, Integer>> selectionCount(){
+        String hql = "from StudentEntity ";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        List<StudentEntity> studentList = (List<StudentEntity>)query.list();
+        List<HashMap<StudentEntity, Integer>> selectionCountList = new ArrayList<HashMap<StudentEntity, Integer>>();
+        for(int i = 0 ; i < studentList.size() ; i++) {
+            hql = "select count(*) from SelectionEntity selection where selection.studentByStudentNum = ?";
+            query = sessionFactory.getCurrentSession().createQuery(hql);
+            query.setEntity(0, studentList.get(i));
+            int courseCount = ((Integer)query.uniqueResult()).intValue();
+            HashMap<StudentEntity, Integer> hashMap = new HashMap<StudentEntity, Integer>();
+            hashMap.put(studentList.get(i), courseCount);
+            selectionCountList.add(hashMap);
+        }
+        return selectionCountList;
     }
 }
