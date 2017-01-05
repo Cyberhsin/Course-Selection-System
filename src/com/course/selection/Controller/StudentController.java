@@ -3,6 +3,7 @@ package com.course.selection.Controller;
 import com.course.selection.Entity.StudentEntity;
 import com.course.selection.Service.StudentService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,16 +18,17 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping("/Student")
 public class StudentController {
 
     @Resource
     private StudentService studentService;
     //遍历所有学生
-    @RequestMapping("listAllStudent")
-    public String listAllStudent(HttpServletRequest request) {
-        request.setAttribute("studentList", studentService.listAllStudent());
-        return "/listAll";
+    @RequestMapping("/listAllStudent")
+    public String listAllStudent(ModelMap modelMap) {
+        List<StudentEntity> studentList = studentService.listAllStudent();
+        modelMap.addAttribute("studentList", studentList);
+        System.out.println("lllllllll");
+        return "/studentList";
     }
     //根据学号模糊查询学生
     @RequestMapping("/selectStudentByStudentNum/{studentNum}")
@@ -72,12 +74,15 @@ public class StudentController {
     }
     //登录验证
     @RequestMapping("/studentLoginCheck")
-    public void studentLoginCheck(StudentEntity studentEntity, HttpServletRequest request){
+    public String studentLoginCheck(StudentEntity studentEntity, HttpServletRequest request){
         System.out.println("StudentController.studentLoginCheck()");
         String studentNum = studentEntity.getStudentNum();
         String studentPwd = studentEntity.getStudentPwd();
         boolean flag = studentService.studentLoginCheck(studentNum, studentPwd);
-        System.out.println(flag);
+        if (flag)
+            return "redirect:index";
+        else
+            return "redirect:login";
     }
     //学生籍贯统计
     @RequestMapping("/studentNativeCount")
@@ -89,7 +94,7 @@ public class StudentController {
     //学生爱好统计
     @RequestMapping("/studentHobbyCount")
     public String studentLoginCheck(HttpServletRequest request){
-        List<HashMap<String, Integer>> studentHobbyList = studentService.studentNativeCount();
+        List<HashMap<String, Integer>> studentHobbyList = studentService.studentHobbyCount();
         request.setAttribute("student", studentHobbyList);
         return "redirect:/student/studentHobbyCount";
     }

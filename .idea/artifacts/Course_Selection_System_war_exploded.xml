@@ -14,6 +14,7 @@
           <element id="library" level="project" name="MySQL-connector 5.1.40" />
           <element id="library" level="project" name="DBCP 2.1.1" />
           <element id="library" level="project" name="Aspectjweaver" />
+          <element id="library" level="project" name="JSTL" />
         </element>
       </element>
     </root>

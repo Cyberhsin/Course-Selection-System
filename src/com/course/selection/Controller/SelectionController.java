@@ -18,7 +18,6 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping("/Selection")
 public class SelectionController {
 
     private StudentService studentService;

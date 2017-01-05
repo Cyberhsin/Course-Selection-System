@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -126,22 +127,17 @@ desired effect
                     <th>年龄</th>
                     <th>操作</th>
                 </tr>
-                <c:if test="${!empty studentList }">
-                    <c:forEach items="${studentList }" var="user">
+                <c:if test="${!empty studentList}">
+                    <c:forEach items="${studentList}" var="student">
                         <tr>
-                            <td>${user.userName }</td>
-                            <td>${user.age }</td>
-                            <td>
-                                <a href="/Student/selectStudent/{studentNum}?id=${user.id }">编辑</a>
-                                <a href="javascript:del('${user.id }')">删除</a>
-                            </td>
+                            <td>${student.studentName }</td>
+                            <td>${student.studentNum }</td>
                         </tr>
                     </c:forEach>
                 </c:if>
                 </tbody>
             </table>
             <!-- Your Page Content Here -->
-
         </section>
         <!-- /.content -->
     </div>
@@ -171,7 +167,7 @@ desired effect
                 <h3 class="control-sidebar-heading">Recent Activity</h3>
                 <ul class="control-sidebar-menu">
                     <li>
-                        <a href="javascript::;">
+                        <a href="javascript:;">
                             <i class="menu-icon fa fa-birthday-cake bg-red"></i>
 
                             <div class="menu-info">
@@ -187,7 +183,7 @@ desired effect
                 <h3 class="control-sidebar-heading">Tasks Progress</h3>
                 <ul class="control-sidebar-menu">
                     <li>
-                        <a href="javascript::;">
+                        <a href="javascript:;">
                             <h4 class="control-sidebar-subheading">
                                 Custom Template Design
                                 <span class="pull-right-container">

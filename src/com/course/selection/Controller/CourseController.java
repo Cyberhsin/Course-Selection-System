@@ -14,7 +14,6 @@ import java.util.List;
  * Created by Shinlee on 2017/1/1.
  */
 @Controller
-@RequestMapping("/Course")
 public class CourseController {
 
     @Resource(name = "courseService")

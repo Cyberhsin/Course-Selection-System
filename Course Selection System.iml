@@ -49,7 +49,9 @@
     <orderEntry type="library" name="Spring MVC-4.3.4.RELEASE" level="project" />
     <orderEntry type="library" name="MySQL-connector 5.1.40" level="project" />
     <orderEntry type="library" name="DBCP 2.1.1" level="project" />
-    <orderEntry type="library" name="Servlet" level="project" />
     <orderEntry type="library" name="Aspectjweaver" level="project" />
+    <orderEntry type="library" name="JSTL" level="project" />
+    <orderEntry type="library" name="JSTL" level="project" />
+    <orderEntry type="library" name="Servlet" level="project" />
   </component>
 </module>

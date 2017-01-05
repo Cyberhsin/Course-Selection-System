@@ -70,7 +70,7 @@ public class StudentServiceImpl implements StudentService{
     }
 
     public List<HashMap<String, Integer>> studentHobbyCount(){
-        List<HashMap<String, Integer>> studentHobbyList = studentDao.studentNativeCount();
+        List<HashMap<String, Integer>> studentHobbyList = studentDao.studentHobbyCount();
         return studentHobbyList;
     }
 }

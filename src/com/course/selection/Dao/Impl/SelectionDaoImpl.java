@@ -63,7 +63,6 @@ public class SelectionDaoImpl implements SelectionDao{
         courseCount = courseCount + 1;
         session.update(courseCount);
 
-
         String studentHql = "from StudentEntity student where student.studentNum = ?";
         Query studentQuery = sessionFactory.getCurrentSession().createQuery(studentHql);
         studentQuery.setString(0, studentNum);

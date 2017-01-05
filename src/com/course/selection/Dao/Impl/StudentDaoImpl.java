@@ -64,6 +64,13 @@ public class StudentDaoImpl implements StudentDao{
     }
 
     @Transactional
+    public List<StudentEntity> listAllStudent(){
+        String hql = "from StudentEntity ";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        return  (List<StudentEntity>)query.list();
+    }
+
+    @Transactional
     public List<StudentEntity> selectStudentByStudentNum (String studentNum){
         String hql = "from StudentEntity student where student.studentNum like :studentNum";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
@@ -85,14 +92,6 @@ public class StudentDaoImpl implements StudentDao{
     public void updateStudent(String studentNum, StudentEntity studentEntity){
         this.deleteStudent(studentNum);
         this.insertStudent(studentEntity);
-    }
-
-    @Transactional
-    public List<StudentEntity> listAllStudent(){
-        String hql = "from StudentEntity ";
-        Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        List<StudentEntity> studentList = (List<StudentEntity>)query.list();
-        return studentList;
     }
 
     @Transactional
