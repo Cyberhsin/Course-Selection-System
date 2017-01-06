@@ -7,6 +7,7 @@
     <class name="com.course.selection.Entity.StudentEntity" table="student" schema="course_selection">
         <id name="studentId">
             <column name="student_id" sql-type="varchar(30)" length="30"/>
+            <generator class="uuid"/>
         </id>
         <property name="studentNum">
             <column name="student_num" sql-type="varchar(20)" length="20"/>
@@ -24,10 +25,10 @@
             <column name="student_sex" sql-type="varchar(20)" length="20"/>
         </property>
         <property name="studentPwd">
-            <column name="student_pwd" sql-type="varchar(20)" length="20"/>
+            <column name="student_pwd" sql-type="varchar(50)" length="50"/>
         </property>
         <property name="studentAddress">
-            <column name="student_address" sql-type="varchar(20)" length="20" not-null="true"/>
+            <column name="student_address" sql-type="varchar(80)" length="80" not-null="true"/>
         </property>
         <property name="studentNative">
             <column name="student_native" sql-type="varchar(20)" length="20" not-null="true"/>

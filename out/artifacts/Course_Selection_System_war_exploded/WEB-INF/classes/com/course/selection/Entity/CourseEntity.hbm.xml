@@ -6,7 +6,8 @@
 
     <class name="com.course.selection.Entity.CourseEntity" table="course" schema="course_selection">
         <id name="courseId">
-            <column name="course_id" sql-type="varchar(30)" length="30"/>
+            <column name="course_id" sql-type="varchar(50)" length="30"/>
+            <generator class="uuid"/>
         </id>
         <property name="courseNum">
             <column name="course_num" sql-type="varchar(20)" length="20"/>

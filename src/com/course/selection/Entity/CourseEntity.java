@@ -1,4 +1,5 @@
 package com.course.selection.Entity;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -14,7 +15,9 @@ public class CourseEntity {
     private Integer courseCount;
 
     @Id
-    @Column(name = "course_id", nullable = false, length = 30)
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name = "system-uuid",strategy="uuid")
+    @Column(length=32)
     public String getCourseId() {
         return courseId;
     }

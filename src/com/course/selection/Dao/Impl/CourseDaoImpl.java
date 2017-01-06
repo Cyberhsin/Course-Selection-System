@@ -29,7 +29,7 @@ public class CourseDaoImpl implements CourseDao{
 
     @Transactional
     public List<CourseEntity> listAllCourse(){
-        String hql = "from StudentEntity ";
+        String hql = "from CourseEntity ";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         List<CourseEntity> courseList = (List<CourseEntity>)query.list();
         return courseList;

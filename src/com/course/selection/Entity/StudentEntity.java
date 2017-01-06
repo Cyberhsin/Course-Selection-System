@@ -1,5 +1,7 @@
 package com.course.selection.Entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 /**
@@ -21,7 +23,9 @@ public class StudentEntity {
     private String studentHobby;
 
     @Id
-    @Column(name = "student_id", nullable = false, length = 30)
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name = "system-uuid",strategy="uuid")
+    @Column(length=50)
     public String getStudentId() {
         return studentId;
     }
@@ -81,7 +85,7 @@ public class StudentEntity {
     }
 
     @Basic
-    @Column(name = "student_pwd", nullable = false, length = 20)
+    @Column(name = "student_pwd", nullable = false, length = 50)
     public String getStudentPwd() {
         return studentPwd;
     }
@@ -91,7 +95,7 @@ public class StudentEntity {
     }
 
     @Basic
-    @Column(name = "student_address", nullable = true, length = 20)
+    @Column(name = "student_address", nullable = true, length = 80)
     public String getStudentAddress() {
         return studentAddress;
     }

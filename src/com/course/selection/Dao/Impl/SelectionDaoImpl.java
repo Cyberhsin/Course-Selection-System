@@ -1,15 +1,14 @@
 package com.course.selection.Dao.Impl;
 
 import com.course.selection.Dao.SelectionDao;
+import org.springframework.stereotype.Repository;
 import com.course.selection.Entity.CourseEntity;
 import com.course.selection.Entity.SelectionEntity;
 import com.course.selection.Entity.StudentEntity;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +19,7 @@ import java.util.List;
  */
 
 @Repository
-public class SelectionDaoImpl implements SelectionDao{
+public class SelectionDaoImpl implements SelectionDao {
 
     @Resource
     private SessionFactory sessionFactory;
@@ -34,21 +33,31 @@ public class SelectionDaoImpl implements SelectionDao{
     }
 
     @Transactional
-    public List<SelectionEntity> selectSelectionByStudentNum (String studentNum){
-        String hql = "from SelectionEntity selection where selection.studentByStudentNum.studentNum = ?";
+    public List<CourseEntity> selectSelectionByStudentNum (String studentNum){
+        List<CourseEntity> studentCourseList = new ArrayList<CourseEntity>();
+        String hql = "select courseNum from SelectionEntity selection where selection.studentNum = ?";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString(0, studentNum);
-        List<SelectionEntity> selectionList = (List<SelectionEntity>)query.list();
-        return selectionList;
+        studentCourseList = (List<CourseEntity>)query.list();
+        return studentCourseList;
     }
 
     @Transactional
-    public List<SelectionEntity> selectSelectionByCourseNum(String courseNum){
-        String hql = "from SelectionEntity selection where selection.courseByCourseNum.courseNum = ?";
+    public HashMap<StudentEntity, Long> selectionCount(){
+        HashMap<StudentEntity, Long> studentSelectionCount = new HashMap<StudentEntity, Long>();
+        String hql = "from StudentEntity ";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        query.setString(0, courseNum);
-        List<SelectionEntity> selectionList = (List<SelectionEntity>)query.list();
-        return selectionList;
+        List<StudentEntity> studentList = (List<StudentEntity>)query.list();
+
+        hql = "select count(*) from SelectionEntity selection where selection.studentNum.studentNum = ?";
+        query = sessionFactory.getCurrentSession().createQuery(hql);
+
+        for(int i = 0 ; i < studentList.size() ; i++) {
+            query.setString(0, studentList.get(i).getStudentNum());
+            long count = (Long) query.uniqueResult();
+            studentSelectionCount.put(studentList.get(i),count);
+        }
+        return studentSelectionCount;
     }
 
     @Transactional
@@ -56,39 +65,22 @@ public class SelectionDaoImpl implements SelectionDao{
         Session session = sessionFactory.getCurrentSession();
 
         String courseHql = "from CourseEntity course where course.courseNum = ?";
-        Query courseQuery = sessionFactory.getCurrentSession().createQuery(courseHql);
+        Query courseQuery = session.createQuery(courseHql);
         courseQuery.setString(0, courseNum);
         CourseEntity courseEntity = (CourseEntity) courseQuery.uniqueResult();
-        Integer courseCount = courseEntity.getCourseCount();
+        int courseCount = courseEntity.getCourseCount();
         courseCount = courseCount + 1;
-        session.update(courseCount);
+        courseEntity.setCourseCount(courseCount);
+        session.merge(courseEntity);
 
         String studentHql = "from StudentEntity student where student.studentNum = ?";
-        Query studentQuery = sessionFactory.getCurrentSession().createQuery(studentHql);
-        studentQuery.setString(0, studentNum);
-        StudentEntity studentEntity = (StudentEntity) studentQuery.uniqueResult();
+        Query query = sessionFactory.getCurrentSession().createQuery(studentHql);
+        query.setString(0, studentNum);
+        StudentEntity studentEntity = (StudentEntity) query.uniqueResult();
 
         SelectionEntity selectionEntity = new SelectionEntity();
-        selectionEntity.setCourseByCourseNum(courseEntity);
-        selectionEntity.setStudentByStudentNum(studentEntity);
+        selectionEntity.setStudentNum(studentEntity);
+        selectionEntity.setCourseNum(courseEntity);
         session.save(selectionEntity);
-    }
-
-    @Transactional
-    public List<HashMap<StudentEntity, Integer>> selectionCount(){
-        String hql = "from StudentEntity ";
-        Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        List<StudentEntity> studentList = (List<StudentEntity>)query.list();
-        List<HashMap<StudentEntity, Integer>> selectionCountList = new ArrayList<HashMap<StudentEntity, Integer>>();
-        for(int i = 0 ; i < studentList.size() ; i++) {
-            hql = "select count(*) from SelectionEntity selection where selection.studentByStudentNum = ?";
-            query = sessionFactory.getCurrentSession().createQuery(hql);
-            query.setEntity(0, studentList.get(i));
-            int courseCount = ((Integer)query.uniqueResult()).intValue();
-            HashMap<StudentEntity, Integer> hashMap = new HashMap<StudentEntity, Integer>();
-            hashMap.put(studentList.get(i), courseCount);
-            selectionCountList.add(hashMap);
-        }
-        return selectionCountList;
     }
 }

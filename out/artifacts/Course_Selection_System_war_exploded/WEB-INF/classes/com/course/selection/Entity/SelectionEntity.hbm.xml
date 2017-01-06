@@ -6,12 +6,13 @@
 
     <class name="com.course.selection.Entity.SelectionEntity" table="selection" schema="course_selection">
         <id name="selectionId">
-            <column name="selection_id" sql-type="varchar(30)" length="30"/>
+            <column name="selection_id" sql-type="varchar(50)" length="50"/>
+            <generator class="uuid"/>
         </id>
-        <many-to-one name="studentByStudentNum" class="com.course.selection.Entity.StudentEntity">
+        <many-to-one name="studentNum" class="com.course.selection.Entity.StudentEntity" property-ref="studentNum">
             <column name="student_num"/>
         </many-to-one>
-        <many-to-one name="courseByCourseNum" class="com.course.selection.Entity.CourseEntity">
+        <many-to-one name="courseNum" class="com.course.selection.Entity.CourseEntity" property-ref="courseNum">
             <column name="course_num"/>
         </many-to-one>
     </class>

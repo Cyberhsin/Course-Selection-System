@@ -17,6 +17,6 @@ public interface StudentDao {
     public StudentEntity selectStudentInfo (String studentNum);
     public List<StudentEntity> selectStudentByStudentNum (String studentNum);
     public List<StudentEntity> selectStudentByStudentName (String studentName);
-    public List<HashMap<String, Integer>> studentNativeCount();
-    public List<HashMap<String, Integer>> studentHobbyCount();
+    public HashMap<String, Long> studentNativeCount();
+    public HashMap<String, Long>  studentHobbyCount();
 }

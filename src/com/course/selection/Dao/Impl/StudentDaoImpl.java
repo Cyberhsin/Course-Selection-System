@@ -11,7 +11,6 @@ import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import java.security.MessageDigest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,23 +35,27 @@ public class StudentDaoImpl implements StudentDao{
     public void insertStudent(StudentEntity studentEntity){
         Session session = sessionFactory.getCurrentSession();
         try {
-            String adminPwd = studentEntity.getStudentPwd();
+            String studertPwd = studentEntity.getStudentPwd();
             MessageDigest MD5 = MessageDigest.getInstance("MD5");
             BASE64Encoder base64Encoder = new BASE64Encoder();
-            String encryptPwd = base64Encoder.encode(MD5.digest(adminPwd.getBytes("UTF-8")));
+            String encryptPwd = base64Encoder.encode(MD5.digest(studertPwd.getBytes("UTF-8")));
             studentEntity.setStudentPwd(encryptPwd);
         } catch (Exception e){
             System.out.println("MD5加密失败");
         }
         session.save(studentEntity);
+        session.flush();
     }
 
     @Transactional
     public void deleteStudent(String studentNum){
-        String hql = "delete StudentEntity student where student.studentName = ?";
+        String hql = "from StudentEntity student where student.studentNum = ?";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString(0, studentNum);
-        query.executeUpdate();
+        StudentEntity studentEntity = (StudentEntity) query.uniqueResult();
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(studentEntity);
+        session.flush();
     }
 
     @Transactional
@@ -74,7 +77,7 @@ public class StudentDaoImpl implements StudentDao{
     public List<StudentEntity> selectStudentByStudentNum (String studentNum){
         String hql = "from StudentEntity student where student.studentNum like :studentNum";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        query.setString("studentNum", studentNum);
+        query.setString("studentNum", "%"+studentNum+"%");
         List<StudentEntity> studentList = (List<StudentEntity>)query.list();
         return studentList;
     }
@@ -83,71 +86,83 @@ public class StudentDaoImpl implements StudentDao{
     public List<StudentEntity> selectStudentByStudentName (String studentName){
         String hql = "from StudentEntity student where student.studentName like :studentName";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        query.setString("studentName", studentName);
+        query.setString("studentName", "%"+studentName+"%");
         List<StudentEntity> studentList = (List<StudentEntity>)query.list();
         return studentList;
     }
 
     @Transactional
     public void updateStudent(String studentNum, StudentEntity studentEntity){
-        this.deleteStudent(studentNum);
-        this.insertStudent(studentEntity);
+        Session session = sessionFactory.getCurrentSession();
+        StudentEntity studentOriginal = this.selectStudentInfo(studentNum);
+        studentEntity.setStudentId(studentOriginal.getStudentId());
+        try {
+            String studertPwd = studentEntity.getStudentPwd();
+            MessageDigest MD5 = MessageDigest.getInstance("MD5");
+            BASE64Encoder base64Encoder = new BASE64Encoder();
+            String encryptPwd = base64Encoder.encode(MD5.digest(studertPwd.getBytes("UTF-8")));
+            studentEntity.setStudentPwd(encryptPwd);
+        } catch (Exception e){
+            System.out.println("MD5加密失败");
+        }
+        session.merge(studentEntity);
     }
 
     @Transactional
     public boolean studentLoginCheck(String studentNum, String studentPwd){
+        boolean flag = false;
         String hql = "from StudentEntity student where student.studentNum = ?";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString(0, studentNum);
-        StudentEntity studentEntity = (StudentEntity)query.uniqueResult();
-        if (studentEntity != null)
-        {
-            if (studentEntity.getStudentPwd().equals(studentPwd))
-            {
-                return true;
+        StudentEntity studentEntity = (StudentEntity) query.uniqueResult();
+        if (studentEntity != null) {
+            try {
+                MessageDigest MD5 = MessageDigest.getInstance("MD5");
+                BASE64Encoder base64Encoder = new BASE64Encoder();
+                String encryptPwd = base64Encoder.encode(MD5.digest(studentPwd.getBytes("UTF-8")));
+                if (encryptPwd.equals(studentEntity.getStudentPwd())) {
+                    flag = true;
+                }
+            } catch (Exception e) {
+                System.out.println("MD5加密失败");
             }
-            else
-                return false;
         }
-        else
-        {
-            return false;
-        }
+        return flag;
     }
 
     @Transactional
-    public List<HashMap<String, Integer>> studentNativeCount(){
+    public HashMap<String, Long> studentNativeCount(){
+        HashMap<String, Long> studentNativeCount = new HashMap<String, Long>();
+
         String hql = "select distinct studentNative from StudentEntity";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         List<String> nativeList = query.list();
-        List<HashMap<String, Integer>> studentNativeList = new ArrayList<HashMap<String, Integer>>();
+
+        hql = "select count(*) from StudentEntity student where student.studentNative = :nativeList";
+        query = sessionFactory.getCurrentSession().createQuery(hql);
         for(int i = 0 ; i < nativeList.size() ; i++) {
-            hql = "select count(*) from StudentEntity student where student.studentNative = ?";
-            query = sessionFactory.getCurrentSession().createQuery(hql);
-            query.setString(0, nativeList.get(i));
-            int nativeCount = ((Integer)query.uniqueResult()).intValue();
-            HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
-            hashMap.put(nativeList.get(i), nativeCount);
-            studentNativeList.add(hashMap);
+            query.setString("nativeList", nativeList.get(i));
+            long count = (Long) query.uniqueResult();
+            studentNativeCount.put(nativeList.get(i), count);
         }
-        return studentNativeList;
+        return studentNativeCount;
     }
 
     @Transactional
-    public List<HashMap<String, Integer>> studentHobbyCount(){
+    public HashMap<String, Long> studentHobbyCount(){
+        HashMap<String, Long> studentHobbyCount = new HashMap<String, Long>();
+
         String hql = "select distinct studentHobby from StudentEntity";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         List<String> hobbyList = query.list();
-        List<HashMap<String, Integer>> studentHobbyList = new ArrayList<HashMap<String, Integer>>();
+
+        hql = "select count(*) from StudentEntity student where student.studentHobby = :nativeList";
+        query = sessionFactory.getCurrentSession().createQuery(hql);
         for(int i = 0 ; i < hobbyList.size() ; i++) {
-            hql = "select count(*) from StudentEntity student where student.studentHobby = ?";
-            query = sessionFactory.getCurrentSession().createQuery(hql);
-            query.setString(0, hobbyList.get(i));
-            int nativeCount = ((Integer)query.uniqueResult()).intValue();
-            HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
-            hashMap.put(hobbyList.get(i), nativeCount);
-            studentHobbyList.add(hashMap);
+            query.setString("nativeList", hobbyList.get(i));
+            long count = (Long) query.uniqueResult();
+            studentHobbyCount.put(hobbyList.get(i), count);
         }
-        return studentHobbyList;
+        return studentHobbyCount;
     }
 }

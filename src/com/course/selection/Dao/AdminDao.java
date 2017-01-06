@@ -1,5 +1,4 @@
 package com.course.selection.Dao;
-
 import com.course.selection.Entity.AdminEntity;
 
 /**

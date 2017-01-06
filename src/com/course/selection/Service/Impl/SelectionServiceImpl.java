@@ -1,7 +1,7 @@
 package com.course.selection.Service.Impl;
 
 import com.course.selection.Dao.SelectionDao;
-import com.course.selection.Entity.SelectionEntity;
+import com.course.selection.Entity.CourseEntity;
 import com.course.selection.Entity.StudentEntity;
 import com.course.selection.Service.SelectionService;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Service
-public class SelectionServiceImpl implements SelectionService{
+public class SelectionServiceImpl implements SelectionService {
 
     @Resource
     private SelectionDao selectionDao;
@@ -32,18 +32,13 @@ public class SelectionServiceImpl implements SelectionService{
         selectionDao.insertSelection(studentNum, courseNum);
     }
 
-    public List<SelectionEntity> selectSelectionByStudentNum (String studentNum) {
-        List<SelectionEntity> selectionList = selectionDao.selectSelectionByStudentNum(studentNum);
-        return selectionList;
+    public List<CourseEntity> selectSelectionByStudentNum (String studentNum) {
+        List<CourseEntity> studentCourseList = selectionDao.selectSelectionByStudentNum(studentNum);
+        return studentCourseList;
     }
 
-    public List<SelectionEntity> selectSelectionByCourseNum(String courseNum){
-        List<SelectionEntity> selectionList = selectionDao.selectSelectionByStudentNum(courseNum);
-        return selectionList;
-    }
-
-    public List<HashMap<StudentEntity, Integer>> selectionCount(){
-        List<HashMap<StudentEntity, Integer>> selectionCountList = selectionDao.selectionCount();
+    public HashMap<StudentEntity, Long> selectionCount(){
+        HashMap<StudentEntity, Long> selectionCountList = selectionDao.selectionCount();
         return selectionCountList;
     }
 }

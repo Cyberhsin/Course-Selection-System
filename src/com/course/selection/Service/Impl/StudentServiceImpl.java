@@ -64,13 +64,13 @@ public class StudentServiceImpl implements StudentService{
         return studentList;
     }
 
-    public List<HashMap<String, Integer>> studentNativeCount(){
-        List<HashMap<String, Integer>> studentNativeList = studentDao.studentNativeCount();
-        return studentNativeList;
+    public HashMap<String, Long> studentNativeCount(){
+        HashMap<String, Long> studentNativeCount = studentDao.studentNativeCount();
+        return studentNativeCount;
     }
 
-    public List<HashMap<String, Integer>> studentHobbyCount(){
-        List<HashMap<String, Integer>> studentHobbyList = studentDao.studentHobbyCount();
-        return studentHobbyList;
+    public HashMap<String, Long>  studentHobbyCount(){
+        HashMap<String, Long>  studentHobbyCount = studentDao.studentHobbyCount();
+        return studentHobbyCount;
     }
 }
