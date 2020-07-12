@@ -13,8 +13,9 @@
 *.tar.gz
 *.rar
 
-# IDEA config files
+# IDE config files
 .idea
+.vscode
 *.iml
 
 # Built files
