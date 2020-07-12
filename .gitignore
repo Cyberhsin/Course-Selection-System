@@ -16,3 +16,6 @@
 # IDEA config files
 .idea
 *.iml
+
+# Built files
+out
